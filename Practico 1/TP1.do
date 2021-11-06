@@ -111,15 +111,17 @@ swilk residuos
 * Paso 12: Ejercicio 9
 *
 * Calcular de las elasticidad
-* En una regresión log-log el termino beta_1 corresponde a la elasticidad 
-* entre las variables
-generate gasto_log = log(gastoenalimentosyt)
-generate ingreso_log = log(ingresosemanalxt)
-* Modelo de regresion
-regress gasto_log ingreso_log
-* Ante un aumento del 1% en los ingresos, el gasto aumentara 0.694%
+* E = beta_1.(x/y), dado que △y/△x = beta_1
+
+* Calculo la medias de x e y
+egen gastos_medios = mean(gastoenalimentosyt)
+egen ingresos_medios = mean(ingresosemanalxt)
+generate elasticidad = 0.1282886*(ingresos_medios/gastos_medios)
+
+display elasticidad
+* Ante un aumento del 1% en los ingresos, el gasto aumentara 0.687%
 * Los alimentos son un bien normal porque su elasticidad es positiva sin embargo,
-* al ser menor a 1 se los clasificas como bienes necesarios
+* al ser menor a 1 se los clasifica como bienes necesarios
 ********************************************************************************
 
 ********************************************************************************

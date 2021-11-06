@@ -3,7 +3,7 @@
        log:  /Users/alessiobocco/Documents/Maestria/Maestria Austral/Econometría/Practicos/Econo
 > metria/Practico 1/log/TP1_Econometria.log
   log type:  text
- opened on:   2 Nov 2021, 17:39:15
+ opened on:   4 Nov 2021, 11:41:57
 
 . ********************************************************************************
 . 
@@ -217,32 +217,22 @@ Total estimation                  Number of obs   =         40
 . * Paso 12: Ejercicio 9
 . *
 . * Calcular de las elasticidad
-. * En una regresión log-log el termino beta_1 corresponde a la elasticidad 
-. * entre las variables
-. generate gasto_log = log(gastoenalimentosyt)
+. * E = beta_1.(x/y), dado que △y/△x = beta_1
+. 
+. * Calculo la medias de x e y
+. egen gastos_medios = mean(gastoenalimentosyt)
 
-. generate ingreso_log = log(ingresosemanalxt)
+. egen ingresos_medios = mean(ingresosemanalxt)
 
-. * Modelo de regresion
-. regress gasto_log ingreso_log
+. generate elasticidad = 0.1282886*(ingresos_medios/gastos_medios)
 
-      Source |       SS           df       MS      Number of obs   =        40
--------------+----------------------------------   F(1, 38)        =     25.48
-       Model |  1.77932063         1  1.77932063   Prob > F        =    0.0000
-    Residual |  2.65344666        38  .069827544   R-squared       =    0.4014
--------------+----------------------------------   Adj R-squared   =    0.3856
-       Total |  4.43276729        39    .1136607   Root MSE        =    .26425
+. 
+. display elasticidad
+.68715662
 
-------------------------------------------------------------------------------
-   gasto_log |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
--------------+----------------------------------------------------------------
- ingreso_log |   .6940451   .1374909     5.05   0.000     .4157093    .9723808
-       _cons |   .2997616   .8953845     0.33   0.740    -1.512849    2.112373
-------------------------------------------------------------------------------
-
-. * Ante un aumento del 1% en los ingresos, el gasto aumentara 0.694%
+. * Ante un aumento del 1% en los ingresos, el gasto aumentara 0.687%
 . * Los alimentos son un bien normal porque su elasticidad es positiva sin embargo,
-. * al ser menor a 1 se los clasificas como bienes necesarios
+. * al ser menor a 1 se los clasifica como bienes necesarios
 . ********************************************************************************
 . 
 . ********************************************************************************
@@ -289,5 +279,5 @@ ingresosemanalxt |   .1282886   .0305393     4.20   0.000     .0664651    .19011
        log:  /Users/alessiobocco/Documents/Maestria/Maestria Austral/Econometría/Practicos/Econo
 > metria/Practico 1/log/TP1_Econometria.log
   log type:  text
- closed on:   2 Nov 2021, 17:39:20
+ closed on:   4 Nov 2021, 11:42:01
 -------------------------------------------------------------------------------------------------

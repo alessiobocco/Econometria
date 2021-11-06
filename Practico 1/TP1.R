@@ -119,10 +119,10 @@ residuos %>%
 # ---------------------------------------------------------------------------- #
 # Paso 10: Calculo de elastacidad ----
 # ---------------------------------------------------------------------------- #
-datos %>%
-  dplyr::mutate(log_gatos = log(gastoenalimentosyt),
-                log_ingresos = log(ingresosemanalxt)) %>%
-  do(tidy(lm(log_gatos~log_ingresos, data = .)))
+gastos_medios = mean(datos$gastoenalimentosyt)
+ingresos_medios = mean(datos$ingresosemanalxt)
+elasticidad = 0.1282886*(ingresos_medios/gastos_medios)
+
 # -----------------------------------------------------------------------------
 
 # ---------------------------------------------------------------------------- #
