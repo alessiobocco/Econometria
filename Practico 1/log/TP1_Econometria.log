@@ -3,7 +3,7 @@
        log:  /Users/alessiobocco/Documents/Maestria/Maestria Austral/Econometría/Practicos/Econo
 > metria/Practico 1/log/TP1_Econometria.log
   log type:  text
- opened on:   4 Nov 2021, 11:41:57
+ opened on:   7 Nov 2021, 18:13:44
 
 . ********************************************************************************
 . 
@@ -22,17 +22,16 @@ variable name   type    format     label      variable label
 gastoenalimen~t float   %8.0g                 
 ingresosemana~t float   %8.0g                 
 
-. ********************************************************************************
 . 
-. ********************************************************************************
-. * Paso 4: Ejercicio 1
-. *
-. * Histograma de gastoenalimentosyt
+end of do-file
+
+. do "/var/folders/y7/l23wtszj75d_zt0zdmx438vr0000gn/T//SD03549.000000"
+
 . hist gastoenalimentosyt, ///
 >        title(Distribución del gasto en alimentos) xtitle(Gasto) ytitle(Densidad)
 (bin=6, start=52.25, width=36.13)
 
-.            graph export "./figuras/histograma_gasto.png", width(400) replace
+.            graph export "./figuras/histograma_gasto.png", width(1000) replace
 (file /Users/alessiobocco/Documents/Maestria/Maestria Austral/Econometría/Practicos/Econometria/
 > Practico 1/figuras/histograma_gasto.png written in PNG format)
 
@@ -54,19 +53,23 @@ ingresosemana~t float   %8.0g
 95%      221.255         227.11       Skewness       1.034835
 99%       269.03         269.03       Kurtosis       4.129706
 
-. ********************************************************************************
 . 
-. ********************************************************************************
-. * Paso 5: Ejercicio 2
-. *
-. * Histograma de ingresosemanalxt
-. hist ingresosemanalxt, ///
->        title(Distribución del ingreso semanal) xtitle(Ingreso) ytitle(Densidad)
-(bin=6, start=258.29999, width=149.38333)
+. * Media del gasto
+. egen media_gasto = mean(gastoenalimentosyt)
 
-.            graph export "./figuras/histograma_ingreso.png", width(400) replace
-(file /Users/alessiobocco/Documents/Maestria/Maestria Austral/Econometría/Practicos/Econometria/
-> Practico 1/figuras/histograma_ingreso.png written in PNG format)
+. display media_gasto
+130.313
+
+. * Mediana del gasto
+. egen mediana_gasto = median(gastoenalimentosyt)
+
+. display mediana_gasto
+120.705
+
+. 
+end of do-file
+
+. do "/var/folders/y7/l23wtszj75d_zt0zdmx438vr0000gn/T//SD03549.000000"
 
 . * Inspeccion de la variable
 . summarize ingresosemanalxt, detail 
@@ -86,198 +89,6 @@ ingresosemana~t float   %8.0g
 95%      1077.65         1141.3       Skewness       .2186621
 99%       1154.6         1154.6       Kurtosis       2.985861
 
-. ********************************************************************************
 . 
-. ********************************************************************************
-. * Paso 6: Ejercicio 3
-. *
-. * Diagrama de dispersión entre gastos e ingresos
-. graph twoway scatter gastoenalimentosyt ingresosemanalxt, ///
->                 title(Relación entre el ingreso semanal y el gasto en alimentos) xtitle(Ingreso
-> ) ytitle(Gasto)
+end of do-file
 
-.                 graph export "./figuras/dispersion_ingreso_gasto.png", width(400) replace
-(file /Users/alessiobocco/Documents/Maestria/Maestria Austral/Econometría/Practicos/Econometria/
-> Practico 1/figuras/dispersion_ingreso_gasto.png written in PNG format)
-
-. ********************************************************************************
-. 
-. ********************************************************************************
-. * Paso 7: Ejercicio 4
-. *
-. * Modelo de regresión por OLS entre gastos e ingresos
-. regress gastoenalimentosyt ingresosemanalxt
-
-      Source |       SS           df       MS      Number of obs   =        40
--------------+----------------------------------   F(1, 38)        =     17.65
-       Model |   25221.219         1   25221.219   Prob > F        =    0.0002
-    Residual |  54311.3331        38  1429.24561   R-squared       =    0.3171
--------------+----------------------------------   Adj R-squared   =    0.2991
-       Total |  79532.5521        39  2039.29621   Root MSE        =    37.805
-
-----------------------------------------------------------------------------------
-gastoenaliment~t |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
------------------+----------------------------------------------------------------
-ingresosemanalxt |   .1282886   .0305393     4.20   0.000     .0664651    .1901121
-           _cons |   40.76756   22.13865     1.84   0.073    -4.049799    85.58493
-----------------------------------------------------------------------------------
-
-. * beta_0 = 40.76756
-. * beta_1 = .1282886 
-. ********************************************************************************
-. 
-. ********************************************************************************
-. * Paso 8: Ejercicio 5
-. *
-. * Grafico de evaluacion de los residuos de la regresión
-. rvfplot
-
-.                 graph export "./figuras/residuos_vs_valores_ajustados.png", width(400) replace
-(file /Users/alessiobocco/Documents/Maestria/Maestria Austral/Econometría/Practicos/Econometria/
-> Practico 1/figuras/residuos_vs_valores_ajustados.png written in PNG format)
-
-. ********************************************************************************
-. 
-. ********************************************************************************
-. * Paso 9: Ejercicio 6
-. *
-. * Tests de heterocedaticidad
-. * Test de White
-. imtest, white
-
-White's test for Ho: homoskedasticity
-         against Ha: unrestricted heteroskedasticity
-
-         chi2(2)      =     14.58
-         Prob > chi2  =    0.0007
-
-Cameron & Trivedi's decomposition of IM-test
-
----------------------------------------------------
-              Source |       chi2     df      p
----------------------+-----------------------------
-  Heteroskedasticity |      14.58      2    0.0007
-            Skewness |       3.38      1    0.0660
-            Kurtosis |       0.06      1    0.8019
----------------------+-----------------------------
-               Total |      18.03      4    0.0012
----------------------------------------------------
-
-. * Test de Breusch-Pagan
-. estat hettest
-
-Breusch-Pagan / Cook-Weisberg test for heteroskedasticity 
-         Ho: Constant variance
-         Variables: fitted values of gastoenalimentosyt
-
-         chi2(1)      =    11.29
-         Prob > chi2  =   0.0008
-
-. ********************************************************************************
-. 
-. ********************************************************************************
-. * Paso 10: Ejercicio 7
-. *
-. * Analizar salidas del modelo de regresión
-. ********************************************************************************
-. 
-. ********************************************************************************
-. * Paso 11: Ejercicio 8
-. *
-. * Calcular los residuos
-. generate gastos_precichos =  40.76756 + .1282886*ingresosemanalxt // Se pordía usar predict tam
-> bién
-
-. generate residuos = gastoenalimentosyt - gastos_precichos
-
-. 
-. * Suma de residuos
-. total(residuos)
-
-Total estimation                  Number of obs   =         40
-
---------------------------------------------------------------
-             |      Total   Std. Err.     [95% Conf. Interval]
--------------+------------------------------------------------
-    residuos |  -.0000992   236.0168     -477.3891    477.3889
---------------------------------------------------------------
-
-. * Normalidad de residuos 
-. swilk residuos
-
-                   Shapiro-Wilk W test for normal data
-
-    Variable |        Obs       W           V         z       Prob>z
--------------+------------------------------------------------------
-    residuos |         40    0.96363      1.437     0.764    0.22253
-
-. ********************************************************************************
-. 
-. ********************************************************************************
-. * Paso 12: Ejercicio 9
-. *
-. * Calcular de las elasticidad
-. * E = beta_1.(x/y), dado que △y/△x = beta_1
-. 
-. * Calculo la medias de x e y
-. egen gastos_medios = mean(gastoenalimentosyt)
-
-. egen ingresos_medios = mean(ingresosemanalxt)
-
-. generate elasticidad = 0.1282886*(ingresos_medios/gastos_medios)
-
-. 
-. display elasticidad
-.68715662
-
-. * Ante un aumento del 1% en los ingresos, el gasto aumentara 0.687%
-. * Los alimentos son un bien normal porque su elasticidad es positiva sin embargo,
-. * al ser menor a 1 se los clasifica como bienes necesarios
-. ********************************************************************************
-. 
-. ********************************************************************************
-. * Paso 13: Ejercicio 10
-. *
-. * Prediccion de un nivel de gasto para un valor determinado de ingreso de 750
-. regress gastoenalimentosyt ingresosemanalxt
-
-      Source |       SS           df       MS      Number of obs   =        40
--------------+----------------------------------   F(1, 38)        =     17.65
-       Model |   25221.219         1   25221.219   Prob > F        =    0.0002
-    Residual |  54311.3331        38  1429.24561   R-squared       =    0.3171
--------------+----------------------------------   Adj R-squared   =    0.2991
-       Total |  79532.5521        39  2039.29621   Root MSE        =    37.805
-
-----------------------------------------------------------------------------------
-gastoenaliment~t |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
------------------+----------------------------------------------------------------
-ingresosemanalxt |   .1282886   .0305393     4.20   0.000     .0664651    .1901121
-           _cons |   40.76756   22.13865     1.84   0.073    -4.049799    85.58493
-----------------------------------------------------------------------------------
-
-. * Prediccion con el modelo de regresion
-. adjust ingresosemanalxt=750
-
--------------------------------------------------------------------------------------------------
-     Dependent variable: gastoenali~t     Command: regress
- Covariate set to value: ingresosem~t = 750
--------------------------------------------------------------------------------------------------
-
-----------------------
-      All |         xb
-----------+-----------
-          |    136.984
-----------------------
-     Key:  xb  =  Linear Prediction
-
-. ********************************************************************************
-. 
-. ********************************************************************************
-. * Paso 14: Cerrar log
-. log close
-      name:  <unnamed>
-       log:  /Users/alessiobocco/Documents/Maestria/Maestria Austral/Econometría/Practicos/Econo
-> metria/Practico 1/log/TP1_Econometria.log
-  log type:  text
- closed on:   4 Nov 2021, 11:42:01
--------------------------------------------------------------------------------------------------

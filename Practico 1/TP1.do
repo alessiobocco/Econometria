@@ -36,9 +36,16 @@ describe gastoenalimentosyt ingresosemanalxt
 * Histograma de gastoenalimentosyt
 hist gastoenalimentosyt, ///
        title(Distribución del gasto en alimentos) xtitle(Gasto) ytitle(Densidad)
-	   graph export "./figuras/histograma_gasto.png", width(400) replace
+	   graph export "./figuras/histograma_gasto.png", width(1000) replace
 * Inspeccion de la variable
 summarize gastoenalimentosyt, detail 
+
+* Media del gasto
+egen media_gasto = mean(gastoenalimentosyt)
+display media_gasto
+* Mediana del gasto
+egen mediana_gasto = median(gastoenalimentosyt)
+display mediana_gasto
 ********************************************************************************
 
 ********************************************************************************
@@ -47,7 +54,7 @@ summarize gastoenalimentosyt, detail
 * Histograma de ingresosemanalxt
 hist ingresosemanalxt, ///
        title(Distribución del ingreso semanal) xtitle(Ingreso) ytitle(Densidad)
-	   graph export "./figuras/histograma_ingreso.png", width(400) replace
+	   graph export "./figuras/histograma_ingreso.png", width(1000) replace
 * Inspeccion de la variable
 summarize ingresosemanalxt, detail 
 ********************************************************************************
@@ -58,7 +65,7 @@ summarize ingresosemanalxt, detail
 * Diagrama de dispersión entre gastos e ingresos
 graph twoway scatter gastoenalimentosyt ingresosemanalxt, ///
 		title(Relación entre el ingreso semanal y el gasto en alimentos) xtitle(Ingreso) ytitle(Gasto)
-		graph export "./figuras/dispersion_ingreso_gasto.png", width(400) replace
+		graph export "./figuras/dispersion_ingreso_gasto.png", width(1000) replace
 ********************************************************************************
 
 ********************************************************************************
@@ -75,7 +82,7 @@ regress gastoenalimentosyt ingresosemanalxt
 *
 * Grafico de evaluacion de los residuos de la regresión
 rvfplot
-		graph export "./figuras/residuos_vs_valores_ajustados.png", width(400) replace
+		graph export "./figuras/residuos_vs_valores_ajustados.png", width(1000) replace
 ********************************************************************************
 
 ********************************************************************************
